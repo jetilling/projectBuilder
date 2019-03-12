@@ -1,0 +1,49 @@
+{
+  "name": "test-app",
+  "uniqueID": "03092019402",
+  "models": [
+    {
+      "modelName": "Projects",
+      "columnNames": [
+        {
+          "columnName": "name",
+          "columnDataType": "string",
+          "nullable": false,
+          "unique": true
+        }, {
+          "columnName": "description",
+          "columnDataType": "text",
+          "nullable": true,
+          "unique": false
+        }
+      ]
+    }, {
+      "modelName": "Tasks",
+      "columnNames": [
+        {
+          "columnName": "name",
+          "columnDataType": "string",
+          "nullable": false,
+          "unique": false
+        }, {
+          "columnName": "completed",
+          "columnDataType": "bool",
+          "nullable": true,
+          "unique": false
+        }, {
+          "columnName": "project_id",
+          "columnDataType": "unsignedInteger",
+          "nullable": false,
+          "unique": false
+        }
+      ],
+      "foreignKeys": [
+        {
+          "foreignKeyName": "project_id",
+          "referenceTable": "projects",
+          "referenceColumn": "id"
+        }
+      ]
+    }
+  ]
+}
