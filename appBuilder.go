@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"log"
 	"os/exec"
+
+	"github.com/jetilling/projectBuilder/configVars"
 )
 
 type AppDetails struct {
@@ -35,6 +37,10 @@ type ForeignKeys struct {
 }
 
 func main() {
+
+	// INITIALIZE CONFIG VARIABLES
+	configVars.InitConfigVars()
+
 	file, _ := ioutil.ReadFile("appDetails.json")
 
 	data := AppDetails{}
@@ -46,8 +52,8 @@ func main() {
 	createProjectDirectory(data)
 	downloadLaravel(projectFolderString)
 	renameLaravelApp(projectFolderString, data.Name)
-	runComposerInstall(projectFolderString, data.Name)
 	updateEnvironmentFile(projectFolderString, data.Name)
+	pushToGithub(projectFolderString, data.Name)
 
 	fmt.Println("Initial Project Built")
 
@@ -70,13 +76,13 @@ func renameLaravelApp(projectFolderString string, appName string) {
 	runBashScript(cmd)
 }
 
-func runComposerInstall(projectFolderString string, appName string) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/composerInstall.sh", projectFolderString, appName)
+func updateEnvironmentFile(projectFolderString string, appName string) {
+	cmd := exec.Command("/bin/sh", "./buildScripts/updateEnvironmentFile.sh", projectFolderString, appName)
 	runBashScript(cmd)
 }
 
-func updateEnvironmentFile(projectFolderString string, appName string) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/updateEnvironmentFile.sh", projectFolderString, appName)
+func pushToGithub(projectFolderString string, appName string) {
+	cmd := exec.Command("/bin/sh", "./buildScripts/pushToGithub.sh", projectFolderString, appName, configVars.Config.GITHUB_PASS)
 	runBashScript(cmd)
 }
 
