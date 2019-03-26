@@ -9,11 +9,12 @@ echo "---------------------------------------------------"
 chmod -R ugo+rw storage/
 
 echo "---------------------------------------------------"
-echo "| Updating ENV file"
+echo "| Copying over ENV template file"
 echo "---------------------------------------------------"
 
-cp ~/go/src/github.com/jetilling/projectBuilder/.env.example .env
+cp ~/go/src/github.com/jetilling/projectBuilder/laravel_files/.env.template .env.template
 
+# Laravel comes with an .env.example file - we want to remove that
 rm .env.example
 
 echo "---------------------------------------------------"

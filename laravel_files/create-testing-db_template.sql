@@ -1,0 +1,1 @@
+CREATE DATABASE {{project_name}}_test;

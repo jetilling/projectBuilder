@@ -8,6 +8,7 @@ import (
 // Add any config variables here
 type Configuration struct {
 	GITHUB_PASS string
+	ROOT_PATH   string
 }
 
 var Config Configuration
