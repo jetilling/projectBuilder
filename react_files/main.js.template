@@ -1,0 +1,18 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+
+const Main = ({}) =>  {
+
+  return (
+    <div>
+      <p>Welcome your new app: {{project_name}}</p>
+
+      <p>Running: React</p>
+    </div>
+  )
+}
+
+Main.propTypes = {
+};
+
+export default Main

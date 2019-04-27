@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/jetilling/projectBuilder/apiBuilder"
 	"github.com/jetilling/projectBuilder/appBuilder"
 	"github.com/jetilling/projectBuilder/configVars"
 	"github.com/rs/cors"
@@ -35,6 +36,7 @@ func main() {
 
 	// API ENDPOINTS
 	router.HandleFunc("/api/build-project", appBuilder.Build).Methods("POST")
+	router.HandleFunc("/api/build-api", apiBuilder.Build).Methods("POST")
 
 	router.Use(loggingMiddleware)
 

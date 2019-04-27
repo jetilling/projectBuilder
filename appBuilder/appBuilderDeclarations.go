@@ -7,37 +7,70 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/jetilling/projectBuilder/configVars"
 )
 
 func createProjectDirectory(data AppDetails) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/createProjectDirectory.sh", data.Name, data.UniqueID)
+	cmd := exec.Command("/bin/sh", "./buildScripts/initialBuildScripts/createProjectDirectory.sh", data.Name, data.UniqueID)
 	runBashScript(cmd)
 }
 
 func downloadLaravel(projectFolderString string) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/downloadLaravel.sh", projectFolderString)
+	cmd := exec.Command("/bin/sh", "./buildScripts/initialBuildScripts/downloadLaravel.sh", projectFolderString)
 	runBashScript(cmd)
 }
 
 func renameLaravelApp(projectFolderString, appName string) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/renameLaravelApp.sh", projectFolderString, appName)
+	cmd := exec.Command("/bin/sh", "./buildScripts/initialBuildScripts/renameLaravelApp.sh", projectFolderString, appName)
 	runBashScript(cmd)
 }
 
-func copyEnvironmentFile(projectFolderString, appName string) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/copyEnvironmentFile.sh", projectFolderString, appName)
+func copyEnvironmentFile(projectFilePath, projectFolderString, appName string) {
+	cmd := exec.Command("/bin/sh", "./buildScripts/initialBuildScripts/copyEnvironmentFile.sh", projectFolderString, appName)
 	runBashScript(cmd)
+
+	inputEnvironmentFile := fmt.Sprintf("%s/.env.template", projectFilePath)
+	outputEnvironmentFile := fmt.Sprintf("%s/.env", projectFilePath)
+	findAndReplace(inputEnvironmentFile, outputEnvironmentFile, "{{project_name}}", strings.ToLower(appName))
 }
 
-func copyDockerFiles(projectFolderString, appName string) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/copyDockerFiles.sh", projectFolderString, appName)
+func copyDockerFiles(projectFilePath, projectFolderString, appName string) {
+	cmd := exec.Command("/bin/sh", "./buildScripts/initialBuildScripts/copyDockerFiles.sh", projectFolderString, appName)
 	runBashScript(cmd)
+
+	inputDockerFile := fmt.Sprintf("%s/docker-compose_template.yml", projectFilePath)
+	outputDockerFile := fmt.Sprintf("%s/docker-compose.yml", projectFilePath)
+	findAndReplace(inputDockerFile, outputDockerFile, "{{project_name}}", strings.ToLower(appName))
+
+	inputTestDBFile := fmt.Sprintf("%s/create-testing-db_template.sql", projectFilePath)
+	outputTestDBFile := fmt.Sprintf("%s/create-testing-db.sql", projectFilePath)
+	findAndReplace(inputTestDBFile, outputTestDBFile, "{{project_name}}", strings.ToLower(appName))
 }
 
 func removeTemplateFiles(projectFolderString, appName string) {
 	cmd := exec.Command("/bin/sh", "./buildScripts/removeTemplateFiles.sh", projectFolderString, appName)
+	runBashScript(cmd)
+}
+
+func addReact(projectFilePath, projectFolderString, appName string) {
+	cmd := exec.Command("/bin/sh", "./buildScripts/reactScripts/addReact.sh", projectFolderString, appName)
+	runBashScript(cmd)
+
+	inputMainFile := fmt.Sprintf("%s/resources/js/components/main.js.template", projectFilePath)
+	outputMainFile := fmt.Sprintf("%s/resources/js/components/main.js", projectFilePath)
+	findAndReplace(inputMainFile, outputMainFile, "{{project_name}}", strings.ToLower(appName))
+
+	inputIndexFile := fmt.Sprintf("%s/resources/js/index.js.template", projectFilePath)
+	outputIndexFile := fmt.Sprintf("%s/resources/js/index.js", projectFilePath)
+	findAndReplace(inputIndexFile, outputIndexFile, "{{project_name}}", strings.ToLower(appName))
+
+	inputReducerFile := fmt.Sprintf("%s/resources/js/reducer.js.template", projectFilePath)
+	outputReducerFile := fmt.Sprintf("%s/resources/js/reducer.js", projectFilePath)
+	findAndReplace(inputReducerFile, outputReducerFile, "{{project_name}}", strings.ToLower(appName))
+
+	cmd = exec.Command("/bin/sh", "./buildScripts/reactScripts/cleanUpReactTemplates.sh", projectFolderString, appName)
 	runBashScript(cmd)
 }
 

@@ -2,10 +2,6 @@
 
 cd ~/projects/$1/$2
 
-echo "---------------------------------------------------"
-echo "| Copying Over Docker Files"
-echo "---------------------------------------------------"
-
 cp ~/go/src/github.com/jetilling/projectBuilder/laravel_files/app.dockerfile app.dockerfile
 cp ~/go/src/github.com/jetilling/projectBuilder/laravel_files/web.dockerfile web.dockerfile
 cp ~/go/src/github.com/jetilling/projectBuilder/laravel_files/postgres.dockerfile postgres.dockerfile
