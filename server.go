@@ -43,10 +43,10 @@ func main() {
 	// router.HandleFunc("/*")
 
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:5050"},
+		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{"GET", "HEAD", "POST", "PUT", "OPTIONS"},
 		// Enable Debugging for testing, consider disabling in production
-		Debug: false,
+		Debug: true,
 	})
 
 	server := &http.Server{

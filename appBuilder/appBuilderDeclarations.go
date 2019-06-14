@@ -13,22 +13,22 @@ import (
 )
 
 func createProjectDirectory(data AppDetails) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/initialBuildScripts/createProjectDirectory.sh", data.Name, data.UniqueID)
+	cmd := exec.Command("/bin/sh", "./buildScripts/createProjectDirectory.sh", data.Name, data.UniqueID)
 	runBashScript(cmd)
 }
 
 func downloadLaravel(projectFolderString string) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/initialBuildScripts/downloadLaravel.sh", projectFolderString)
+	cmd := exec.Command("/bin/sh", "./buildScripts/laravel/initialBuildScripts/copyLaravel.sh", projectFolderString)
 	runBashScript(cmd)
 }
 
 func renameLaravelApp(projectFolderString, appName string) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/initialBuildScripts/renameLaravelApp.sh", projectFolderString, appName)
+	cmd := exec.Command("/bin/sh", "./buildScripts/laravel/initialBuildScripts/renameLaravelApp.sh", projectFolderString, appName)
 	runBashScript(cmd)
 }
 
 func copyEnvironmentFile(projectFilePath, projectFolderString, appName string) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/initialBuildScripts/copyEnvironmentFile.sh", projectFolderString, appName)
+	cmd := exec.Command("/bin/sh", "./buildScripts/laravel/initialBuildScripts/copyEnvironmentFile.sh", projectFolderString, appName)
 	runBashScript(cmd)
 
 	inputEnvironmentFile := fmt.Sprintf("%s/.env.template", projectFilePath)
@@ -37,7 +37,7 @@ func copyEnvironmentFile(projectFilePath, projectFolderString, appName string) {
 }
 
 func copyDockerFiles(projectFilePath, projectFolderString, appName string) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/initialBuildScripts/copyDockerFiles.sh", projectFolderString, appName)
+	cmd := exec.Command("/bin/sh", "./buildScripts/laravel/initialBuildScripts/copyDockerFiles.sh", projectFolderString, appName)
 	runBashScript(cmd)
 
 	inputDockerFile := fmt.Sprintf("%s/docker-compose_template.yml", projectFilePath)
@@ -50,12 +50,12 @@ func copyDockerFiles(projectFilePath, projectFolderString, appName string) {
 }
 
 func removeTemplateFiles(projectFolderString, appName string) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/removeTemplateFiles.sh", projectFolderString, appName)
+	cmd := exec.Command("/bin/sh", "./buildScripts/laravel/removeTemplateFiles.sh", projectFolderString, appName)
 	runBashScript(cmd)
 }
 
 func addReact(projectFilePath, projectFolderString, appName string) {
-	cmd := exec.Command("/bin/sh", "./buildScripts/reactScripts/addReact.sh", projectFolderString, appName)
+	cmd := exec.Command("/bin/sh", "./buildScripts/laravel/reactScripts/addReact.sh", projectFolderString, appName)
 	runBashScript(cmd)
 
 	inputMainFile := fmt.Sprintf("%s/resources/js/components/main.js.template", projectFilePath)
@@ -70,7 +70,7 @@ func addReact(projectFilePath, projectFolderString, appName string) {
 	outputReducerFile := fmt.Sprintf("%s/resources/js/reducer.js", projectFilePath)
 	findAndReplace(inputReducerFile, outputReducerFile, "{{project_name}}", strings.ToLower(appName))
 
-	cmd = exec.Command("/bin/sh", "./buildScripts/reactScripts/cleanUpReactTemplates.sh", projectFolderString, appName)
+	cmd = exec.Command("/bin/sh", "./buildScripts/laravel/reactScripts/cleanUpReactTemplates.sh", projectFolderString, appName)
 	runBashScript(cmd)
 }
 
